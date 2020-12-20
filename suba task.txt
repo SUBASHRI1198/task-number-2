@@ -1,0 +1,48 @@
+data1=iris
+head(iris)
+#MANOVA
+sep1=iris$Sepal.Length
+pet1=iris$Petal.Length
+#MANOVA TEST
+res.man=manova(cbind(Sepal.Length,Petal.Length)~Species,data=iris)
+#Look to see which differ ANOVA
+summary.aov(res.man)
+#PRINCIPAL COMPONENT ANALYSIS
+#Construction of Principal Component
+fit=princomp(data1[1:4],cor=TRUE)
+summary(fit)
+#scree plot
+plot(fit,type="lines",main="Principal Components-Scree plot")
+#Principal Component Loading
+coeff=loadings(fit)
+print(coeff,digits=3,cutoff=0)
+college_pcscores=predict(fit,data)
+college_pcscores
+#Biplot
+biplot(fit,expand=1,xlim=c(-0.60,0.6),ylim=c(-0.4,0.4),
+xlab="PC-1",ylab="PC-2",main="Bi-Plot")
+#K-MEANS CLUSTERING
+data1=iris
+head(iris)
+#standardizing ariables
+data2=data.frame(scale(data1[1:4],center=TRUE,scale=TRUE))
+row.names(data2)=t(data1[5])
+#determine the mumber of clusters
+wilks_lambda=numeric(10)
+for(i in 1:10)
+{
+set.seed(i)
+fit=kmeans(data2,i)
+wilks_lambda[i]=sum(fit$withinss)/fit$totss
+}
+plot(1:10,wilks_lambda,type="b",xlab="Number of clusters",ylab="ClustersWSS/TSS")
+#kmeans cluster analysis
+fit=kmeans(data2,3)
+data3=data.frame(data1[1:4])
+aggregate(data3,by=list(fit$cluster),FUN=mean)
+#append cluster assignment
+data4=data.frame(data1,fit$cluster)
+head(data4)
+#CORRELATION
+cor(data[1:4])
+
